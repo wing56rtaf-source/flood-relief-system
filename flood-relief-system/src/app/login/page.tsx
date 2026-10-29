@@ -8,7 +8,7 @@ import DarkModeToggle from '@/components/dark-mode-toggle';
 export default function LoginPage() {
   const router = useRouter();
   const [username, setUsername] = useState('');
-  const [otp, setOtp] = useState('123456');
+  const [otp, setOtp] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -45,7 +45,7 @@ export default function LoginPage() {
 
   const handleSelectDemoAccount = (user: string) => {
     setUsername(user);
-    setOtp('123456');
+    setOtp('');
     setErrorMessage(null);
   };
 
@@ -100,8 +100,8 @@ export default function LoginPage() {
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
                 รหัส OTP (6 หลัก)
               </label>
-              <span className="text-[11px] text-blue-600 dark:text-blue-400 font-medium bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded-full">
-                OTP จำลอง: 123456
+              <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full">
+                RTAF MFA
               </span>
             </div>
             <div className="relative">
@@ -111,12 +111,12 @@ export default function LoginPage() {
                 maxLength={6}
                 value={otp}
                 onChange={(e) => setOtp(e.target.value)}
-                placeholder="123456"
+                placeholder="ระบุรหัส OTP 6 หลัก"
                 className="w-full tracking-widest text-center font-mono text-base font-bold px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-slate-800 dark:text-slate-100 transition-all"
               />
             </div>
             <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
-              * สำหรับการทดสอบระบบ สามารถใช้รหัส OTP กลางคือ <code className="font-bold text-blue-600 dark:text-blue-400">123456</code> ได้ทันที
+              * รหัส OTP จะถูกส่งและยืนยันผ่านระบบ RTAF MFA Gateway ของกองทัพอากาศ
             </p>
           </div>
 

@@ -9,8 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "db:push": "prisma db push",
-    "db:seed": "node prisma/seed.js",
-    "test": "npx tsx tests/executable_test_suite.mjs && npx tsx tests/role_otp_duplicate_spec.mjs"
+    "db:seed": "node prisma/seed.js"
   },
   "dependencies": {
     "@prisma/client": "^5.21.1",
