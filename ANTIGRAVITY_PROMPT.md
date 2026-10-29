@@ -1,0 +1,3 @@
+# First prompt for Antigravity
+
+Read `README.md`, `docs/PROJECT_BRIEF.md`, `docs/NEXT_TASKS.md`, `docs/VERIFICATION_NOTES.md`, and the full `transcript/group-transcript.md`. Treat the transcript as historical context, not evidence that implementation or tests passed. Audit the existing `flood-relief-system/` files first. Then make the project runnable with a correct dependency/app structure, fix the critical authentication/session issues, implement the staff case workflow, and create executable tests. Keep public intake disabled by default and enforce the feature flag on both UI and API. Do not claim production readiness until builds/tests and security checks actually pass. Never copy real user data or credentials into this project.

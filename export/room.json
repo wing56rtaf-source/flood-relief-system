@@ -1,0 +1,76 @@
+{
+  "room_id": "df3cd93e-75f8-4582-b1f1-70b9fc1cde1a",
+  "name": "Hermes Software House",
+  "members_json": "[{\"display_name\":\"chief-architect\",\"handle\":\"chief-architect\",\"member_id\":\"chief-architect\",\"profile\":\"chief-architect\",\"target\":{\"kind\":\"local\",\"profile\":\"chief-architect\"}},{\"display_name\":\"ui-ux-designer\",\"handle\":\"ui-ux-designer\",\"member_id\":\"ui-ux-designer\",\"profile\":\"ui-ux-designer\",\"target\":{\"kind\":\"local\",\"profile\":\"ui-ux-designer\"}},{\"display_name\":\"fullstack-dev\",\"handle\":\"fullstack-dev\",\"member_id\":\"fullstack-dev\",\"profile\":\"fullstack-dev\",\"target\":{\"kind\":\"local\",\"profile\":\"fullstack-dev\"}},{\"display_name\":\"qa-automator\",\"handle\":\"qa-automator\",\"member_id\":\"qa-automator\",\"profile\":\"qa-automator\",\"target\":{\"kind\":\"local\",\"profile\":\"qa-automator\"}},{\"display_name\":\"sec-devsecops\",\"handle\":\"sec-devsecops\",\"member_id\":\"sec-devsecops\",\"profile\":\"sec-devsecops\",\"target\":{\"kind\":\"local\",\"profile\":\"sec-devsecops\"}},{\"handle\":\"product-pm\",\"member_id\":\"product-pm\",\"profile\":\"product-pm\",\"target\":{\"kind\":\"local\",\"profile\":\"product-pm\"}}]",
+  "authority_gateway_id": "install:ac5bfd04ee1b46789a26724ce3149010",
+  "authority_epoch": 1,
+  "next_seq": 95,
+  "event_bytes": 182435,
+  "revision": 1,
+  "created_at": 1793164842.0227017,
+  "updated_at": 1793167553.829361,
+  "disbanded_at": null,
+  "members": [
+    {
+      "display_name": "chief-architect",
+      "handle": "chief-architect",
+      "member_id": "chief-architect",
+      "profile": "chief-architect",
+      "target": {
+        "kind": "local",
+        "profile": "chief-architect"
+      }
+    },
+    {
+      "display_name": "ui-ux-designer",
+      "handle": "ui-ux-designer",
+      "member_id": "ui-ux-designer",
+      "profile": "ui-ux-designer",
+      "target": {
+        "kind": "local",
+        "profile": "ui-ux-designer"
+      }
+    },
+    {
+      "display_name": "fullstack-dev",
+      "handle": "fullstack-dev",
+      "member_id": "fullstack-dev",
+      "profile": "fullstack-dev",
+      "target": {
+        "kind": "local",
+        "profile": "fullstack-dev"
+      }
+    },
+    {
+      "display_name": "qa-automator",
+      "handle": "qa-automator",
+      "member_id": "qa-automator",
+      "profile": "qa-automator",
+      "target": {
+        "kind": "local",
+        "profile": "qa-automator"
+      }
+    },
+    {
+      "display_name": "sec-devsecops",
+      "handle": "sec-devsecops",
+      "member_id": "sec-devsecops",
+      "profile": "sec-devsecops",
+      "target": {
+        "kind": "local",
+        "profile": "sec-devsecops"
+      }
+    },
+    {
+      "handle": "product-pm",
+      "member_id": "product-pm",
+      "profile": "product-pm",
+      "target": {
+        "kind": "local",
+        "profile": "product-pm"
+      }
+    }
+  ],
+  "created_at_iso": "2026-10-28T12:20:42.022702+07:00",
+  "updated_at_iso": "2026-10-28T13:05:53.829361+07:00"
+}

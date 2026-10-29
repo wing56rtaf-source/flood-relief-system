@@ -1,0 +1,146 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --foreground-rgb: 30, 41, 59;
+  --background-rgb: 248, 250, 252;
+}
+
+.dark {
+  --foreground-rgb: 241, 245, 249;
+  --background-rgb: 15, 23, 42;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-rgb));
+  font-family: 'Prompt', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #334155;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* Leaflet Dark Mode Tiles */
+.dark .leaflet-tile-pane {
+  filter: brightness(0.65) invert(1) contrast(3) hue-rotate(200deg) saturate(0.35) brightness(0.7);
+}
+.dark .leaflet-container {
+  background: #0f172a !important;
+}
+.dark .leaflet-popup-content-wrapper,
+.dark .leaflet-popup-tip {
+  background: #1e293b !important;
+  color: #f8fafc !important;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
+}
+.dark .leaflet-popup-content {
+  color: #f8fafc !important;
+}
+
+/* Beacon Pulse Animation for Focused Map Marker */
+@keyframes beaconPulse {
+  0% {
+    transform: scale(0.5);
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.85;
+  }
+  100% {
+    transform: scale(3.2);
+    opacity: 0;
+  }
+}
+
+.focus-beacon-gold {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50px;
+  height: 50px;
+  margin-top: -25px;
+  margin-left: -25px;
+  border-radius: 50%;
+  background: rgba(245, 158, 11, 0.45);
+  border: 3.5px solid #f59e0b;
+  pointer-events: none;
+  animation: beaconPulse 1.25s ease-out infinite;
+  box-shadow: 0 0 25px rgba(245, 158, 11, 0.9);
+}
+
+.focus-beacon-cyan {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 50px;
+  height: 50px;
+  margin-top: -25px;
+  margin-left: -25px;
+  border-radius: 50%;
+  background: rgba(6, 182, 212, 0.45);
+  border: 3.5px solid #06b6d4;
+  pointer-events: none;
+  animation: beaconPulse 1.25s ease-out infinite;
+  box-shadow: 0 0 25px rgba(6, 182, 212, 0.9);
+}
+
+/* Screen Shake Animation (for Critical Case alert) */
+@keyframes screenShake {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  10% {
+    transform: translate(-7px, -4px) rotate(-0.5deg);
+  }
+  20% {
+    transform: translate(7px, 4px) rotate(0.5deg);
+  }
+  30% {
+    transform: translate(-9px, 3px) rotate(-1deg);
+  }
+  40% {
+    transform: translate(9px, -3px) rotate(1deg);
+  }
+  50% {
+    transform: translate(-7px, -4px) rotate(-0.5deg);
+  }
+  60% {
+    transform: translate(7px, 4px) rotate(0.5deg);
+  }
+  70% {
+    transform: translate(-5px, 2px) rotate(-0.3deg);
+  }
+  80% {
+    transform: translate(5px, -2px) rotate(0.3deg);
+  }
+  90% {
+    transform: translate(-2px, -1px) rotate(0deg);
+  }
+}
+
+.animate-screen-shake {
+  animation: screenShake 0.4s ease-in-out infinite;
+}

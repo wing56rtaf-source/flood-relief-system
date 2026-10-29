@@ -1,0 +1,179 @@
+{
+  "bundle": "Hermes Software House Antigravity handoff",
+  "source_room": "Hermes Software House",
+  "room_id": "df3cd93e-75f8-4582-b1f1-70b9fc1cde1a",
+  "event_count": 94,
+  "event_types": {
+    "message.user": 4,
+    "message.member": 31,
+    "turn.settled": 50,
+    "turn.failed": 5,
+    "room.activity": 4
+  },
+  "message_count": 35,
+  "project_file_count": 11,
+  "source_project_path": "C:\\Users\\W56-IT-PC69-01\\flood-relief-system",
+  "excluded": [
+    "Hermes state database",
+    "credentials/.env files",
+    "Git internals/build caches"
+  ],
+  "members": [
+    {
+      "display_name": "chief-architect",
+      "handle": "chief-architect",
+      "member_id": "chief-architect",
+      "profile": "chief-architect",
+      "target": {
+        "kind": "local",
+        "profile": "chief-architect"
+      }
+    },
+    {
+      "display_name": "ui-ux-designer",
+      "handle": "ui-ux-designer",
+      "member_id": "ui-ux-designer",
+      "profile": "ui-ux-designer",
+      "target": {
+        "kind": "local",
+        "profile": "ui-ux-designer"
+      }
+    },
+    {
+      "display_name": "fullstack-dev",
+      "handle": "fullstack-dev",
+      "member_id": "fullstack-dev",
+      "profile": "fullstack-dev",
+      "target": {
+        "kind": "local",
+        "profile": "fullstack-dev"
+      }
+    },
+    {
+      "display_name": "qa-automator",
+      "handle": "qa-automator",
+      "member_id": "qa-automator",
+      "profile": "qa-automator",
+      "target": {
+        "kind": "local",
+        "profile": "qa-automator"
+      }
+    },
+    {
+      "display_name": "sec-devsecops",
+      "handle": "sec-devsecops",
+      "member_id": "sec-devsecops",
+      "profile": "sec-devsecops",
+      "target": {
+        "kind": "local",
+        "profile": "sec-devsecops"
+      }
+    },
+    {
+      "handle": "product-pm",
+      "member_id": "product-pm",
+      "profile": "product-pm",
+      "target": {
+        "kind": "local",
+        "profile": "product-pm"
+      }
+    }
+  ],
+  "files": [
+    {
+      "path": "ANTIGRAVITY_PROMPT.md",
+      "size_bytes": 743,
+      "sha256": "7c3a4cdac87c52e4c471f4a5af1f88f8988aa281a7e21da1d196a85691cfb5f2"
+    },
+    {
+      "path": "README.md",
+      "size_bytes": 1935,
+      "sha256": "c9a8a00f01d5e7388afb84eb584e60a22503a3d7a2236ae9379935249bf30dfa"
+    },
+    {
+      "path": "docs/NEXT_TASKS.md",
+      "size_bytes": 3195,
+      "sha256": "dd926b713b5d233c083066a7f2511b7832076e14d7bfaec67dcb449697db578c"
+    },
+    {
+      "path": "docs/PROJECT_BRIEF.md",
+      "size_bytes": 2723,
+      "sha256": "de119391dd8b794181bc54cecbd6ccd21b24dd981a62adad974f4286347a98b0"
+    },
+    {
+      "path": "docs/VERIFICATION_NOTES.md",
+      "size_bytes": 2185,
+      "sha256": "3546920ddedf60f261b4b93ebcf3e72a0bf0d8d58aa76f33759750213075b5c1"
+    },
+    {
+      "path": "export/events.json",
+      "size_bytes": 219396,
+      "sha256": "e54762622c110be760c11aaa87cb11fbf9e3d25b23f0834375e3774e1a7f26d5"
+    },
+    {
+      "path": "export/room.json",
+      "size_bytes": 3076,
+      "sha256": "754b2712466d5523301de7bd23b49a870105455c1be93519a997a2e1e80577c3"
+    },
+    {
+      "path": "flood-relief-system/prisma/schema.prisma",
+      "size_bytes": 1535,
+      "sha256": "69b3c7db9bc7bd5b3aaf0daf19cf3b34c954bc1635f1b0864175a8f7bc0c18dc"
+    },
+    {
+      "path": "flood-relief-system/src/middleware.ts",
+      "size_bytes": 769,
+      "sha256": "19b1b58144dddebc6f0477b6710d150507b64085c25afb7e481cc32807d9340a"
+    },
+    {
+      "path": "flood-relief-system/src/middleware_verify.js",
+      "size_bytes": 512,
+      "sha256": "647cb23fe612d307e5cd981bdf5649bb69b1961fdba1e4e2b088a4c5591e2c5b"
+    },
+    {
+      "path": "flood-relief-system/src/lib/auth.ts",
+      "size_bytes": 546,
+      "sha256": "a942aae20af4b05d7d5f79d37651f99a6cdae3353a77088b6711c3adb22a6e7d"
+    },
+    {
+      "path": "flood-relief-system/src/lib/auth_test.js",
+      "size_bytes": 558,
+      "sha256": "5d9db59a4bdc927754a04523456bd63ad7784c16ac2a1c3bb5bc9208550a5aa6"
+    },
+    {
+      "path": "flood-relief-system/src/lib/pii_verify.js",
+      "size_bytes": 609,
+      "sha256": "9cf9a416b879732f7620e7bf533f1d869f1359ce1e73c406a77575e24abd364f"
+    },
+    {
+      "path": "flood-relief-system/tests/ratelimit_verify.js",
+      "size_bytes": 711,
+      "sha256": "133df3ac1007a9c6aed382c11c89bed7f20b6e35efbc7cb5fc8bfb0598c64a27"
+    },
+    {
+      "path": "flood-relief-system/tests/sanitization_verify.js",
+      "size_bytes": 805,
+      "sha256": "5554b432f4a49b09a46958dd2f5b3a44a7a435e960a8deab2c78ccc3e9168345"
+    },
+    {
+      "path": "flood-relief-system/tests/sprint1_safety.spec.ts",
+      "size_bytes": 411,
+      "sha256": "c46ccfb60c2039500130a0fe839bb694abc9fe9f3b10132548a93528f6350223"
+    },
+    {
+      "path": "flood-relief-system/tests/sprint2_public.spec.ts",
+      "size_bytes": 1286,
+      "sha256": "21a35e35c211a1a0ea49ad14d5e5532a6eb9f792b8d9a662d622c11e120bf1ed"
+    },
+    {
+      "path": "flood-relief-system/tests/TEST_PLAN.md",
+      "size_bytes": 2216,
+      "sha256": "0c544a469fe92c8640a731efa058b3467af1dc6a400297061867f01f9fdbb6d5"
+    },
+    {
+      "path": "transcript/group-transcript.md",
+      "size_bytes": 172720,
+      "sha256": "cf5324444dfcafbedcb2f65c2dad56183966d82119addca60f967f53944c4d60"
+    }
+  ]
+}

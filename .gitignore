@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Next.js build output
+.next/
+**/.next/
+out/
+**/out/
+build/
+**/build/
+
+# Local environment variables
+.env
+**/.env
+.env*.local
+**/.env*.local
+
+# SQLite Database
+*.db
+**/*.db
+*.db-journal
+**/*.db-journal
+
+# TypeScript build info
+*.tsbuildinfo
+**/*.tsbuildinfo
+next-env.d.ts
+**/next-env.d.ts
+
+# OS & Logs
+.DS_Store
+Thumbs.db
+*.log

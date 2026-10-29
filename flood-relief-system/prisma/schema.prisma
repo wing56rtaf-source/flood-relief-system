@@ -1,0 +1,60 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           String     @id @default(uuid())
+  username     String     @unique
+  passwordHash String
+  name         String
+  role         String     @default("STAFF") // "STAFF" | "ADMIN"
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  auditLogs    AuditLog[]
+}
+
+model ReliefCase {
+  id            String   @id @default(uuid())
+  reporterName  String
+  phoneNumber   String
+  peopleCount   Int      @default(1)
+  urgency       String   @default("MEDIUM") // "LOW" | "MEDIUM" | "HIGH" | "CRITICAL"
+  itemsNeeded   String   // Stored as JSON string e.g. '["น้ำดื่ม","อาหารแห้ง"]'
+  description   String?
+  latitude      Float
+  longitude     Float
+  addressDetail String
+  status        String   @default("PENDING") // "PENDING" | "IN_PROGRESS" | "RESOLVED" | "CANCELLED"
+  source        String   @default("STAFF")   // "STAFF" | "PUBLIC"
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([status, urgency])
+  @@index([createdAt])
+}
+
+model SystemSetting {
+  key       String   @id
+  value     String
+  updatedBy String?
+  updatedAt DateTime @updatedAt
+}
+
+model AuditLog {
+  id        String   @id @default(uuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  action    String
+  targetId  String?
+  details   String?
+  ipAddress String?
+  createdAt DateTime @default(now())
+
+  @@index([action, createdAt])
+}
