@@ -1,7 +1,7 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'flood_relief_default_secret_key_2026';
+const JWT_SECRET = process.env.JWT_SECRET || 'flood_relief_secret_jwt_key_2026_antigravity';
 
 export type UserRole = 'PRIME_ADMIN' | 'DATA_ENTRY' | 'RESCUE' | 'ADMIN' | 'STAFF';
 

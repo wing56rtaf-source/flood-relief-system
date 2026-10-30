@@ -8,7 +8,7 @@ import DarkModeToggle from '@/components/dark-mode-toggle';
 export default function LoginPage() {
   const router = useRouter();
   const [username, setUsername] = useState('');
-  const [otp, setOtp] = useState('123456');
+  const [otp, setOtp] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -35,18 +35,11 @@ export default function LoginPage() {
         return;
       }
 
-      router.push('/dashboard');
-      router.refresh();
+      window.location.href = '/dashboard';
     } catch {
       setErrorMessage('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ กรุณาลองใหม่อีกครั้ง');
       setIsLoading(false);
     }
-  };
-
-  const handleSelectDemoAccount = (user: string) => {
-    setUsername(user);
-    setOtp('123456');
-    setErrorMessage(null);
   };
 
   return (
@@ -100,8 +93,8 @@ export default function LoginPage() {
               <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
                 รหัส OTP (6 หลัก)
               </label>
-              <span className="text-[11px] text-blue-600 dark:text-blue-400 font-medium bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded-full">
-                OTP จำลอง: 123456
+              <span className="text-[11px] text-slate-500 dark:text-slate-400 font-medium bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-full">
+                RTAF MFA
               </span>
             </div>
             <div className="relative">
@@ -111,12 +104,12 @@ export default function LoginPage() {
                 maxLength={6}
                 value={otp}
                 onChange={(e) => setOtp(e.target.value)}
-                placeholder="123456"
+                placeholder="ระบุรหัส OTP 6 หลัก"
                 className="w-full tracking-widest text-center font-mono text-base font-bold px-4 py-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-slate-800 dark:text-slate-100 transition-all"
               />
             </div>
             <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1">
-              * สำหรับการทดสอบระบบ สามารถใช้รหัส OTP กลางคือ <code className="font-bold text-blue-600 dark:text-blue-400">123456</code> ได้ทันที
+              * รหัส OTP จะถูกส่งและยืนยันผ่านระบบ RTAF MFA Gateway ของกองทัพอากาศ
             </p>
           </div>
 
@@ -139,77 +132,7 @@ export default function LoginPage() {
           </button>
         </form>
 
-        {/* Roles & Demo Accounts Box */}
-        <div className="mt-6 pt-5 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/60 p-4 rounded-2xl">
-          <p className="font-semibold text-slate-700 dark:text-slate-200 mb-2">เลือกบัญชีทดสอบตามสิทธิ์ (คลิกเพื่อเลือก):</p>
-          <div className="space-y-2">
-            <button
-              type="button"
-              onClick={() => handleSelectDemoAccount('nattanon_r')}
-              className="w-full text-left p-2.5 rounded-xl border border-purple-200 dark:border-purple-900/60 bg-purple-50/50 dark:bg-purple-950/30 hover:bg-purple-100/60 dark:hover:bg-purple-900/50 transition-colors flex items-center justify-between"
-            >
-              <div>
-                <span className="font-bold text-purple-700 dark:text-purple-300 block text-xs">
-                  👑 Prime Admin (<code className="font-mono">nattanon_r</code>)
-                </span>
-                <span className="text-[11px] text-slate-500 dark:text-slate-400">
-                  สิทธิ์ผู้ดูแลระบบหลัก: เพิ่ม/ลบ/แก้ไข/ค้นหาผู้ใช้, จัดการและลบเคส
-                </span>
-              </div>
-              <span className="text-purple-600 dark:text-purple-400 font-bold text-xs">เลือก &rarr;</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleSelectDemoAccount('admin')}
-              className="w-full text-left p-2.5 rounded-xl border border-indigo-200 dark:border-indigo-900/60 bg-indigo-50/50 dark:bg-indigo-950/30 hover:bg-indigo-100/60 dark:hover:bg-indigo-900/50 transition-colors flex items-center justify-between"
-            >
-              <div>
-                <span className="font-bold text-indigo-700 dark:text-indigo-300 block text-xs">
-                  ⚙️ Admin (<code className="font-mono">admin</code>)
-                </span>
-                <span className="text-[11px] text-slate-500 dark:text-slate-400">
-                  สิทธิ์ผู้ดูแลระบบ: ทำได้ทุกอย่างเหมือนผู้กรอกข้อมูล, แก้ไข/ลบผู้ใช้ได้, ควบคุมระบบรับเรื่องสาธารณะ
-                </span>
-              </div>
-              <span className="text-indigo-600 dark:text-indigo-400 font-bold text-xs">เลือก &rarr;</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleSelectDemoAccount('staff_entry')}
-              className="w-full text-left p-2.5 rounded-xl border border-blue-200 dark:border-blue-900/60 bg-blue-50/50 dark:bg-blue-950/30 hover:bg-blue-100/60 dark:hover:bg-blue-900/50 transition-colors flex items-center justify-between"
-            >
-              <div>
-                <span className="font-bold text-blue-700 dark:text-blue-300 block text-xs">
-                  📝 ผู้กรอกข้อมูล (<code className="font-mono">staff_entry</code>)
-                </span>
-                <span className="text-[11px] text-slate-500 dark:text-slate-400">
-                  สิทธิ์: เพิ่มข้อมูลเคส, เพิ่มผู้ใช้, ลบเคส (ห้ามแก้ไข/ลบผู้ใช้)
-                </span>
-              </div>
-              <span className="text-blue-600 dark:text-blue-400 font-bold text-xs">เลือก &rarr;</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleSelectDemoAccount('rescuer1')}
-              className="w-full text-left p-2.5 rounded-xl border border-emerald-200 dark:border-emerald-900/60 bg-emerald-50/50 dark:bg-emerald-950/30 hover:bg-emerald-100/60 dark:hover:bg-emerald-900/50 transition-colors flex items-center justify-between"
-            >
-              <div>
-                <span className="font-bold text-emerald-700 dark:text-emerald-300 block text-xs">
-                  🚑 หน่วยกู้ภัย (<code className="font-mono">rescuer1</code>)
-                </span>
-                <span className="text-[11px] text-slate-500 dark:text-slate-400">
-                  สิทธิ์: ดูข้อมูลได้อย่างเดียว, เปลี่ยนสถานะได้ (ห้ามเพิ่ม/ลบเคส และห้ามจัดการผู้ใช้)
-                </span>
-              </div>
-              <span className="text-emerald-600 dark:text-emerald-400 font-bold text-xs">เลือก &rarr;</span>
-            </button>
-          </div>
-        </div>
-
-        <div className="text-center mt-5">
+        <div className="text-center mt-6 pt-4 border-t border-slate-100 dark:border-slate-800">
           <Link href="/" className="text-xs text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-slate-200 transition-colors">
             &larr; กลับหน้าหลัก
           </Link>

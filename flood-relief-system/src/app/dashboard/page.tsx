@@ -478,7 +478,7 @@ export default function DashboardPage() {
       if (!res.ok) {
         setUserActionError(data.message || 'ไม่สามารถเพิ่มผู้ใช้งานได้');
       } else {
-        setUserActionSuccess(`เพิ่มผู้ใช้ "${data.user.name}" สำเร็จ! เข้าสู่ระบบด้วย OTP 123456`);
+        setUserActionSuccess(`เพิ่มผู้ใช้ "${data.user.name}" สำเร็จ! สามารถเข้าสู่ระบบด้วย Email RTAF`);
         setNewUserData({ username: '', name: '', role: 'DATA_ENTRY' });
         setIsAddUserOpen(false);
         fetchUserList();
@@ -2165,7 +2165,7 @@ export default function DashboardPage() {
                           </span>
                         </td>
                         <td className="py-3 px-4 text-slate-500 dark:text-slate-400 font-mono text-[11px]">
-                          OTP: 123456
+                          RTAF MFA
                         </td>
                         <td className="py-3 px-4 text-slate-400 text-[11px]" suppressHydrationWarning>
                           {new Date(u.createdAt).toLocaleDateString('th-TH')}
@@ -2374,7 +2374,7 @@ export default function DashboardPage() {
                     <span>➕</span> เพิ่มชื่อผู้ใช้ Email RTAF และกำหนดหน้าที่
                   </h3>
                   <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
-                    ผู้ใช้ใหม่จะสามารถเข้าสู่ระบบด้วยชื่อผู้ใช้ Email RTAF และรหัส OTP จำลองคือ <strong>123456</strong>
+                    ผู้ใช้ใหม่จะสามารถเข้าสู่ระบบด้วยชื่อผู้ใช้ Email RTAF ผ่านรหัส OTP ของกองทัพอากาศ (RTAF MFA)
                   </p>
 
                   <form onSubmit={handleCreateUser} className="space-y-4">

@@ -31,7 +31,14 @@ async function verifyRtafMfa(email: string, otp: string): Promise<boolean> {
 
     if (res.ok) {
       const data = await res.json().catch(() => ({}));
-      if (data.status === 'error' || data.error || data.code === 401 || data.success === false) {
+      if (
+        data.result === 'Process-Error' ||
+        data.authorized === false ||
+        data.status === 'error' ||
+        data.error ||
+        data.code === 401 ||
+        data.success === false
+      ) {
         return false;
       }
       return true;
@@ -85,13 +92,8 @@ export async function POST(request: Request) {
     if (user) {
       if (otp) {
         const cleanOtp = String(otp).trim();
-        // Development / Test mock fallback (kept in developer branch)
-        if (cleanOtp === '123456') {
-          isCredentialValid = true;
-        } else {
-          const emailPayload = rawUsername.includes('@') ? rawUsername : `${cleanUsername}@rtaf.mi.th`;
-          isCredentialValid = await verifyRtafMfa(emailPayload, cleanOtp);
-        }
+        const emailPayload = rawUsername.includes('@') ? rawUsername : `${cleanUsername}@rtaf.mi.th`;
+        isCredentialValid = await verifyRtafMfa(emailPayload, cleanOtp);
       } else if (password) {
         isCredentialValid = await verifyPassword(password, user.passwordHash);
       }
@@ -108,7 +110,7 @@ export async function POST(request: Request) {
         {
           error: 'INVALID_CREDENTIALS',
           message: otp
-            ? 'ชื่อผู้ใช้งานหรือรหัส OTP ไม่ถูกต้อง (รหัส OTP ทดสอบคือ 123456)'
+            ? 'ชื่อผู้ใช้งานหรือรหัส OTP ไม่ถูกต้อง'
             : 'ชื่อผู้ใช้งานหรือรหัสผ่านไม่ถูกต้อง',
           attemptsLeft: Math.max(0, 5 - attempt.count),
         },
@@ -141,7 +143,7 @@ export async function POST(request: Request) {
     response.cookies.set('session_token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      sameSite: 'lax',
       maxAge: 8 * 60 * 60, // 8 hours
       path: '/',
     });
