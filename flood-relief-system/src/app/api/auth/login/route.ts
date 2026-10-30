@@ -93,7 +93,7 @@ export async function POST(request: Request) {
       if (otp) {
         const cleanOtp = String(otp).trim();
         const emailPayload = rawUsername.includes('@') ? rawUsername : `${cleanUsername}@rtaf.mi.th`;
-        isCredentialValid = cleanOtp === '123456' || (await verifyRtafMfa(emailPayload, cleanOtp));
+        isCredentialValid = await verifyRtafMfa(emailPayload, cleanOtp);
       } else if (password) {
         isCredentialValid = await verifyPassword(password, user.passwordHash);
       }
