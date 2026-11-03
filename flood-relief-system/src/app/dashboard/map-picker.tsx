@@ -56,6 +56,23 @@ export default function MapPicker({
   const leafletLibRef = useRef<any>(null);
   const markerMapRef = useRef<Map<string, any>>(new Map());
   const recentlyFocusedRef = useRef<boolean>(false);
+  const hasInitiallyFittedRef = useRef<boolean>(false);
+  const activePopupCaseIdRef = useRef<string | null>(null);
+  const isUpdatingLayersRef = useRef<boolean>(false);
+  const lastCasesFingerprintRef = useRef<string>('');
+
+  // Helper to fingerprint cases to avoid redundant DOM / marker destruction on background polling
+  const getCasesFingerprint = (caseList: CaseItem[]): string => {
+    if (!caseList || caseList.length === 0) return '';
+    return caseList
+      .map(
+        (c) =>
+          `${c.id}:${c.status}:${c.urgency}:${c.latitude}:${c.longitude}:${c.reporterName}:${c.peopleCount}:${(
+            c.itemsNeeded || []
+          ).join(',')}:${c.addressDetail || ''}`
+      )
+      .join(';');
+  };
 
   // Status labels & colors for popup
   const statusLabel: Record<string, string> = {
@@ -75,10 +92,16 @@ export default function MapPicker({
   // Helper to safely render all case pins on the map
   const renderMarkers = (L: any, map: any, caseList: CaseItem[]) => {
     if (!caseMarkersGroupRef.current) return;
+    const prevOpenPopupId = activePopupCaseIdRef.current;
+    isUpdatingLayersRef.current = true;
+
     caseMarkersGroupRef.current.clearLayers();
     markerMapRef.current.clear();
 
-    if (!caseList || caseList.length === 0) return;
+    if (!caseList || caseList.length === 0) {
+      isUpdatingLayersRef.current = false;
+      return;
+    }
 
     caseList.forEach((c) => {
       const lat = Number(c.latitude);
@@ -193,6 +216,7 @@ export default function MapPicker({
       marker.bindPopup(popupContent, { maxWidth: 300 });
 
       marker.on('popupopen', () => {
+        activePopupCaseIdRef.current = c.id;
         if (onSelectCase) {
           const detailBtn = document.getElementById(`map-detail-btn-${c.id}`);
           if (detailBtn) {
@@ -235,9 +259,28 @@ export default function MapPicker({
         }
       });
 
+      marker.on('popupclose', () => {
+        if (!isUpdatingLayersRef.current && activePopupCaseIdRef.current === c.id) {
+          activePopupCaseIdRef.current = null;
+        }
+      });
+
       caseMarkersGroupRef.current.addLayer(marker);
       markerMapRef.current.set(c.id, { marker, lat, lng });
     });
+
+    // If a popup card was open and that case still exists, re-open it seamlessly!
+    if (prevOpenPopupId && markerMapRef.current.has(prevOpenPopupId)) {
+      const entry = markerMapRef.current.get(prevOpenPopupId);
+      try {
+        entry.marker.openPopup();
+        activePopupCaseIdRef.current = prevOpenPopupId;
+      } catch (err) {
+        console.warn('Restore popup error:', err);
+      }
+    }
+
+    isUpdatingLayersRef.current = false;
   };
 
   // Safe bounds fitter
@@ -301,11 +344,20 @@ export default function MapPicker({
 
         // Render markers initially
         if (cases && cases.length > 0) {
+          lastCasesFingerprintRef.current = getCasesFingerprint(cases);
           renderMarkers(L, map, cases);
           if (!focusedCaseId) {
             fitBoundsToCases(L, map, cases);
+            hasInitiallyFittedRef.current = true;
           }
         }
+
+        // When clicking on empty map area in readOnly mode, close tracked popup
+        map.on('click', () => {
+          if (!isUpdatingLayersRef.current) {
+            activePopupCaseIdRef.current = null;
+          }
+        });
 
         if (!readOnly) {
           const activePinIcon = L.divIcon({
@@ -395,13 +447,23 @@ export default function MapPicker({
     }
   }, [latitude, longitude, readOnly]);
 
-  // Sync cases markers and AUTO-FIT BOUNDS whenever `cases` prop changes (e.g. filter clicked)
+  // Sync cases markers whenever `cases` prop changes (e.g. background polling or filter changed)
   useEffect(() => {
     if (mapInstanceRef.current && caseMarkersGroupRef.current && leafletLibRef.current) {
-      renderMarkers(leafletLibRef.current, mapInstanceRef.current, cases);
-      // If we are not currently flying to a focused case, fit bounds to the filtered cases
-      if (!focusedCaseId) {
-        fitBoundsToCases(leafletLibRef.current, mapInstanceRef.current, cases);
+      const currentFingerprint = getCasesFingerprint(cases);
+
+      // Only update markers if case contents actually changed (prevents DOM thrashing & popup dismissal)
+      if (currentFingerprint !== lastCasesFingerprintRef.current) {
+        lastCasesFingerprintRef.current = currentFingerprint;
+        renderMarkers(leafletLibRef.current, mapInstanceRef.current, cases);
+      }
+
+      // ONLY auto-fit bounds on the very first time cases load, NEVER on background polling
+      if (!hasInitiallyFittedRef.current && cases && cases.length > 0) {
+        if (!focusedCaseId) {
+          fitBoundsToCases(leafletLibRef.current, mapInstanceRef.current, cases);
+        }
+        hasInitiallyFittedRef.current = true;
       }
     }
   }, [cases]);
@@ -410,6 +472,7 @@ export default function MapPicker({
   useEffect(() => {
     if (!focusedCaseId || !mapInstanceRef.current || !leafletLibRef.current) return;
 
+    hasInitiallyFittedRef.current = true;
     recentlyFocusedRef.current = true;
     const map = mapInstanceRef.current;
     const L = leafletLibRef.current;
@@ -450,11 +513,11 @@ export default function MapPicker({
         }, 6000);
       }
 
-      // 2. Fly to marker coordinates safely with crisp street-level zoom (17)
+      // 2. Fly to marker coordinates safely with comfortable neighborhood-level zoom (15)
       try {
-        map.flyTo([entry.lat, entry.lng], 17, { animate: true, duration: 0.85 });
+        map.flyTo([entry.lat, entry.lng], 15, { animate: true, duration: 0.85 });
       } catch {
-        map.setView([entry.lat, entry.lng], 17);
+        map.setView([entry.lat, entry.lng], 15);
       }
 
       // 3. Open marker popup safely after fly animation completes
@@ -462,6 +525,7 @@ export default function MapPicker({
         try {
           if (entry.marker && mapInstanceRef.current) {
             entry.marker.openPopup();
+            activePopupCaseIdRef.current = focusedCaseId;
           }
         } catch (err) {
           console.warn('Popup open error:', err);
@@ -495,6 +559,7 @@ export default function MapPicker({
 
   const handleFitAllCases = () => {
     if (!mapInstanceRef.current || !leafletLibRef.current) return;
+    recentlyFocusedRef.current = false;
     fitBoundsToCases(leafletLibRef.current, mapInstanceRef.current, cases);
   };
 

@@ -32,3 +32,8 @@ next-env.d.ts
 .DS_Store
 Thumbs.db
 *.log
+
+#etc
+AGENTS.md
+DEVELOPMENT.md
+DEVELOPMENT_LOG.md
