@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import SmartMapSearch from '@/components/smart-map-search';
 
 const DEFAULT_LAT = 7.0076;
 const DEFAULT_LNG = 100.4712; // Hat Yai center
@@ -75,7 +76,11 @@ export default function PublicMap({ cases = [] }: PublicMapProps) {
           center: [DEFAULT_LAT, DEFAULT_LNG],
           zoom: 13,
           scrollWheelZoom: true,
+          zoomControl: false,
         });
+
+        // Add zoom control at bottom right to avoid overlapping search bar
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
 
         mapInstanceRef.current = map;
 
@@ -200,6 +205,12 @@ export default function PublicMap({ cases = [] }: PublicMapProps) {
     };
   }, [cases]);
 
+  const handleSelectLocation = (lat: number, lng: number) => {
+    if (mapInstanceRef.current) {
+      mapInstanceRef.current.flyTo([lat, lng], 16, { duration: 1.2 });
+    }
+  };
+
   const handleResetHatYai = () => {
     if (mapInstanceRef.current) {
       mapInstanceRef.current.setView([DEFAULT_LAT, DEFAULT_LNG], 13);
@@ -215,6 +226,14 @@ export default function PublicMap({ cases = [] }: PublicMapProps) {
   return (
     <div className="relative w-full h-[380px] sm:h-[460px] md:h-[500px] rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-xl bg-slate-100 dark:bg-slate-900">
       <div ref={mapContainerRef} className="w-full h-full" />
+
+      {/* Smart Address Search Floating Card (Top Left) */}
+      <div className="absolute top-3 left-3 sm:left-4 z-[1000] w-[calc(100%-120px)] sm:w-80 md:w-96 max-w-md pointer-events-auto">
+        <SmartMapSearch
+          onSelectLocation={handleSelectLocation}
+          placeholder="🔍 ค้นหาแลนด์มาร์ก / ซอย (เช่น ม.อ., กิมหยง, ทุ่งรี)..."
+        />
+      </div>
 
       {/* Floating Controls */}
       <div className="absolute top-3 right-3 flex flex-col gap-1.5 z-[1000]">

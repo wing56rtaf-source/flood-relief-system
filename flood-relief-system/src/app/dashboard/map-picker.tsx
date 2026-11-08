@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import SmartMapSearch from '@/components/smart-map-search';
 
-const DEFAULT_LAT = 6.936108289854234;
-const DEFAULT_LNG = 100.41659201221182;
+const DEFAULT_LAT = 7.0076; // Hat Yai center
+const DEFAULT_LNG = 100.4712;
 
 interface CaseItem {
   id: string;
@@ -23,6 +24,7 @@ interface MapPickerProps {
   latitude: number;
   longitude: number;
   onChangeLocation?: (lat: number, lng: number) => void;
+  onSelectPlaceName?: (placeName: string) => void;
   cases?: CaseItem[];
   readOnly?: boolean;
   onSelectCase?: (caseItem: any) => void | Promise<void>;
@@ -38,6 +40,7 @@ export default function MapPicker({
   latitude,
   longitude,
   onChangeLocation,
+  onSelectPlaceName,
   cases = [],
   readOnly = false,
   onSelectCase,
@@ -325,7 +328,11 @@ export default function MapPicker({
           center: [startLat, startLng],
           zoom: 14,
           scrollWheelZoom: true,
+          zoomControl: false,
         });
+
+        // Add zoom control at bottom right to avoid overlapping search bar
+        L.control.zoom({ position: 'bottomright' }).addTo(map);
 
         mapInstanceRef.current = map;
 
@@ -544,6 +551,22 @@ export default function MapPicker({
     return () => clearTimeout(timer);
   }, [focusedCaseId]);
 
+  // Handle location selected from Smart Search Bar
+  const handleSelectSearchedLocation = (lat: number, lng: number, placeName: string) => {
+    if (mapInstanceRef.current) {
+      mapInstanceRef.current.flyTo([lat, lng], 17, { duration: 1.2 });
+    }
+    if (!readOnly && activeMarkerRef.current) {
+      activeMarkerRef.current.setLatLng([lat, lng]);
+      if (onChangeLocation) {
+        onChangeLocation(lat, lng);
+      }
+    }
+    if (onSelectPlaceName) {
+      onSelectPlaceName(placeName);
+    }
+  };
+
   // Helper buttons
   const handleResetToHatYai = () => {
     if (mapInstanceRef.current) {
@@ -567,7 +590,15 @@ export default function MapPicker({
     <div className="relative w-full h-full min-h-[350px] rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-inner bg-slate-100 dark:bg-slate-900">
       <div ref={mapContainerRef} className="w-full h-full" style={{ minHeight: '350px' }} />
 
-      {/* Floating Map Controls */}
+      {/* Smart Address Search Floating Card (Top Left) */}
+      <div className="absolute top-3 left-3 sm:left-4 z-[1000] w-[calc(100%-120px)] sm:w-80 md:w-96 max-w-md pointer-events-auto">
+        <SmartMapSearch
+          onSelectLocation={handleSelectSearchedLocation}
+          placeholder={readOnly ? '🔍 ค้นหาแลนด์มาร์ก / ซอย (ม.อ., กิมหยง, ทุ่งรี)...' : '📍 ค้นหาจุดเกิดเหตุ / คำย่อ / ซอย...'}
+        />
+      </div>
+
+      {/* Floating Map Controls (Top Right) */}
       <div className="absolute top-3 right-3 flex flex-col gap-2 z-[1000]">
         <button
           type="button"
