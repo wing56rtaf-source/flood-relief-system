@@ -1,6 +1,17 @@
+# Exclude from Vercel Serverless Build & Upload
 node_modules
 .next
 .git
 prisma/*.db
 prisma/*.db-journal
+*.sqlite
 tests
+docs
+AGENTS.md
+DEVELOPMENT.md
+DEVELOPMENT_LOG.md
+*.tsbuildinfo
+*.log
+.env
+.env*.local
+.env.production
