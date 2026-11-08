@@ -2741,13 +2741,18 @@ export default function DashboardPage() {
                     {newCaseData.latitude.toFixed(4)}, {newCaseData.longitude.toFixed(4)}
                   </span>
                 </div>
-                <div className="w-full h-56 sm:h-64 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800">
+                <div className="w-full h-72 sm:h-80 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800">
                   <MapPicker
                     latitude={newCaseData.latitude}
                     longitude={newCaseData.longitude}
                     onChangeLocation={(lat, lng) =>
                       setNewCaseData((prev) => ({ ...prev, latitude: lat, longitude: lng }))
                     }
+                    onSelectPlaceName={(placeName) => {
+                      if (!newCaseData.addressDetail || newCaseData.addressDetail.trim() === '') {
+                        setNewCaseData((prev) => ({ ...prev, addressDetail: placeName }));
+                      }
+                    }}
                   />
                 </div>
               </div>

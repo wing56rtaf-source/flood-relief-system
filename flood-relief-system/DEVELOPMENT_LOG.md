@@ -68,6 +68,65 @@
 
 ## 📜 บันทึกประวัติการพัฒนาตามรอบ (Changelog)
 
+### [2026-11-08] - Sprint 9: Expand Landmark Dictionary (Hat Yai & Khlong Hoi Khong 183 Places)
+- **Branch:** `developer`
+- **Objective:** อัปเกรดขยายคลังพจนานุกรมแลนด์มาร์กหาดใหญ่และคลองหอยโข่งเต็มรูปแบบจากชุดข้อมูลทางการของผู้ใช้งาน ครอบคลุม 183 สถานที่ (โรงพยาบาล/อนามัย 17 แห่ง, ศูนย์ราชการ/อปท. 30 แห่ง, ขนส่ง/สถานีรถไฟ 10 แห่ง, สถาบันการศึกษา 22 แห่ง, ตลาด/ห้าง 21 แห่ง, จุดเสี่ยงน้ำท่วมริมคลอง 20 แห่ง, ชุมชนหาดใหญ่ 28 แห่ง, และหมู่บ้านใน อ.คลองหอยโข่ง ครบทั้ง 4 ตำบล 32 หมู่บ้าน) โดยใช้ข้อมูลใหม่แทนที่ข้อมูลเดิมที่ซ้ำกัน
+- **Files Modified:**
+  1. `src/lib/landmarks-hatyai.ts`: นำเข้าข้อมูลแลนด์มาร์ก 183 รายการพร้อมคำย่อ/ภาษาพูดและพิกัดดาวเทียมละเอียดครบถ้วน
+- **Verification & Test Results:**
+  - ทดสอบการค้นหาทั้ง 183 สถานที่: `บ้านจอมหรำ`, `ค่ายรัตนพล`, `เขต 8`, `สะพานท่าเคียน`, `อ่างเก็บน้ำคลองหลา`, `แสงทอง`, `บขส.ตลาดเกษตร`, `มอ`, `กิมหยง` ตอบสนองแม่นยำภายใน < 5ms
+  - `npm run build` ผ่านสมบูรณ์ (14/14 static pages, 0 errors)
+
+### [2026-11-08] - Sprint 8: Streamline Map Layers (Remove Satellite Switcher)
+- **Branch:** `developer`
+- **Objective:** ปลดตัวสลับชั้นข้อมูลดาวเทียม (Satellite Switcher) ออกจากแผนที่ทั้งใน Dashboard และ Public Map ตามความต้องการของผู้ใช้งาน เพื่อให้ UI แผนที่เรียบง่าย โหลดเร็ว คลีน และเน้นเฉพาะแผนที่ถนน OpenStreetMap มาตรฐานร่วมกับระบบค้นหาอัจฉริยะ Smart Address Search
+- **Files Modified:**
+  1. `src/app/dashboard/map-picker.tsx`: ปลด State `layerType`, `satelliteLayerRef`, `labelsLayerRef`, `handleToggleLayer` และปุ่มสลับ Street/Satellite ออกจาก Floating Controls
+  2. `src/components/public-map.tsx`: ปลดเลเยอร์ดาวเทียมและปุ่มสลับเลเยอร์ออกเช่นเดียวกัน คงไว้เฉพาะปุ่มรีเซ็ตศูนย์กลางหาดใหญ่และปุ่มพอดีเคส
+- **Verification & Test Results:**
+  - `npm run build` ผ่านสมบูรณ์ (14/14 static pages, 0 errors, Type check ผ่าน)
+  - แผนที่แสดงผลเฉพาะ OpenStreetMap Street Layer สะอาดตา ไม่โหลดภาพถ่ายดาวเทียมภายนอกเกินจำเป็น
+
+### [2026-11-07] - Sprint 7: Smart Address Search & Satellite Map Layer (แนวทางที่ 1)
+- **Branch:** `developer`
+- **Objective:** พัฒนาระบบค้นหาสถานที่อัจฉริยะบนแผนที่ (Smart Address Search) และตัวสลับภาพถ่ายดาวเทียม (Satellite Layer) ตามเอกสารข้อเสนอทางเทคนิค `LOCATION_ASSISTANCE_PROPOSAL.md` เพื่อช่วยให้เจ้าหน้าที่รับสายสามารถปักหมุดระบุตำแหน่งผู้ประสบภัยจากภาษาพูด/คำย่อได้รวดเร็วภายใน 5–10 วินาที
+- **Files Modified & Added:**
+  1. `src/lib/landmarks-hatyai.ts` (สร้างใหม่): คลังพจนานุกรมแลนด์มาร์กหาดใหญ่และสงขลา (39 สถานที่สำคัญ, คำย่อ, ชุมชน, จุดเสี่ยงน้ำท่วม พร้อม In-Memory Fast Substring/Fuzzy Search < 10ms และกำหนด Bounding Box หาดใหญ่)
+  2. `src/app/api/geocode/route.ts` (สร้างใหม่): Two-Tier Hybrid Geocoding API รองรับการค้นหา Local Dictionary ก่อน และ Fallback ไปยัง Forward Geocoder ภายในกรอบพิกัดหาดใหญ่-สงขลา พร้อม In-Memory LRU Cache
+  3. `src/components/smart-map-search.tsx` (สร้างใหม่): Floating Search Bar พร้อม Auto-Suggest Dropdown, Categorized Badges, ปุ่ม Shortcut Chips ยอดนิยม (ม.อ., ทุ่งรี 17, กิมหยง, ไดอาน่า, หาดใหญ่ใน, คลองแห) และรองรับ Keyboard Navigation
+  4. `src/app/dashboard/map-picker.tsx` (ปรับปรุง): 
+     - เพิ่มตัวสลับชั้นข้อมูลแผนที่ (Street / Satellite Layer Switcher) ด้วย Esri World Imagery ความละเอียดสูง + Hybrid Labels
+     - ติดตั้ง `SmartMapSearch` บนมุมซ้ายบนของแผนที่ และย้ายปุ่มควบคุมการซูมของ Leaflet ไปที่มุมขวาล่างเพื่อป้องกันการบดบัง
+     - เพิ่มฟังก์ชัน `handleLocationFound` สั่ง `flyTo` ซูมไปยังจุดที่พบ และเลื่อนหมุดพิกัดอัตโนมัติ
+  5. `src/app/dashboard/page.tsx` (ปรับปรุง):
+     - เชื่อมต่อ `onSelectPlaceName` จาก `MapPicker` เข้ากับแบบฟอร์มลงทะเบียนเคสใหม่ เพื่อ Auto-fill ชื่อสถานที่ลงในช่อง "รายละเอียดที่อยู่ / จุดสังเกต"
+     - ขยายความสูงของ Map Container ใน Modal รับเรื่องเพื่อเพิ่มพื้นที่ใช้งานให้เจ้าหน้าที่
+  6. `src/components/public-map.tsx` (ปรับปรุง): เพิ่ม `SmartMapSearch` และ Layer Switcher บนแผนที่สาธารณะหน้า Landing Page
+  7. `prisma/schema.prisma` (แก้ไข): ปรับ `datasource provider = "sqlite"` บน branch `developer` ให้สอดคล้องกับ `.env` (`DATABASE_URL="file:./dev.db"`) แก้ปัญหา `PrismaClientInitializationError: Invalid prisma.reliefCase.findMany() invocation` เนื่องจากโปรโตคอลไม่ตรงกัน
+- **Verification & Test Results:**
+  - รัน Unit Test ตรวจสอบ Local Search Engine ผ่านชุดคำค้นยอดนิยม (`มอ`, `ม.อ.`, `ทุ่งรี 17`, `กิมหยง`, `ไดอาน่า`, `หาดใหญ่ใน`, `กองบิน 56`) ผ่าน 100% ตอบสนองแม่นยำ
+  - ทดสอบ `prisma.reliefCase.findMany()` ดึงข้อมูลเคสจาก `dev.db` สำเร็จ 44 เคส ปราศจาก error
+  - ทดสอบการสลับภาพดาวเทียมความละเอียดสูง (Esri Satellite) ราบรื่น ไม่เกิดภาพขาดหรือข้อผิดพลาด
+  - `npm run build` ผ่านสมบูรณ์ (14/14 static pages generated, 0 Errors, API Route dynamic configuration ผ่าน)
+
+### [2026-11-03] - Sprint 6: Map Zoom Optimization & Pin Popup Card Persistence
+- **Branch:** `production` & `developer`
+- **Objective:** ปรับแต่งระบบแผนที่ OpenStreetMap Leaflet ให้คงระดับการซูมและไม่ปิดการ์ดข้อมูลเมื่อมี Background Polling
+- **Changes Made:**
+  1. **ปรับระดับการซูม (FlyTo Zoom Level):**
+     - ปรับระยะซูมเมื่อกด "ดูบนแผนที่" จากเดิมระดับ 17 (Street/Rooftop level ซึ่งใกล้เกินไป) เป็นระดับ 15 (Neighborhood/District level) ทำให้เห็นบริบทถนนและชุมชนรอบข้างได้สบายตาขึ้น
+  2. **คงระดับการซูม ไม่ถูกดึงกลับ (Zoom Persistence & Auto-fit Control):**
+     - แก้ไขปัญหา Background Polling ทุก 3.5 วินาทีที่สั่ง `fitBoundsToCases` ซ้ำซ้อนจนดึงหน้าจอกลับไปครอบคลุมทุกเคส
+     - เพิ่ม `hasInitiallyFittedRef` เพื่อให้ระบบคำนวณ Auto-fit ครอบคลุมเคสทั้งหมดเฉพาะการเปิดแผนที่ครั้งแรกเท่านั้น หากผู้ใช้ซูมดูเคสหรือเลื่อนมุมมอง แผนที่จะคงมุมมองนั้นไว้ตลอดเวลา
+     - ผู้ใช้ยังสามารถกดปุ่ม "🗺️ ปรับพอดีเคส" ด้านบนขวาได้ทุกเมื่อที่ต้องการปรับมุมมองให้ครอบคลุมเคสทั้งหมด
+  3. **การ์ดข้อมูลบนหมุดไม่หาย (Pin Popup Card Persistence):**
+     - เพิ่มระบบ Fingerprint Cache (`getCasesFingerprint`) เพื่อตรวจสอบว่าข้อมูลเคสมีการเปลี่ยนแปลงจริงหรือไม่ หากข้อมูลเคสในการโพลล์รอบใหม่ไม่มีการเปลี่ยนแปลง จะไม่ทำลายหรือวาด Marker ซ้ำ
+     - เพิ่ม `activePopupCaseIdRef` และ `isUpdatingLayersRef` จดจำ ID ของการ์ดที่กำลังเปิดอ่านอยู่ แม้จะมีการอัปเดตสถานะเคสแบบเรียลไทม์ การ์ดข้อมูลจะเปิดแสดงต่อเนื่องโดยไม่ปิดหายไปหลังจาก 2-3 วินาที
+- **Verification:**
+  - ตรวจสอบโค้ด Leaflet lifecycle, Layer Group, Event Listeners (`popupopen`, `popupclose`, `map.click`) ไม่เกิด Memory Leak หรือ Error
+
+---
+
 ### [2026-10-30] - Sprint 5: Production Deployment & Bug Fixes
 - **Branch:** `production` & `developer`
 - **Objective:** ปรับแต่งระบบสำหรับใช้งานจริง Deploy บน Neon PostgreSQL และ Vercel พร้อมแก้ปัญหา Login ค้าง
