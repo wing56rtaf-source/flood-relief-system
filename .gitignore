@@ -1,39 +1,78 @@
-# Dependencies
+# ==============================================================================
+# Non-deployment Files & Documentation (ไม่จำเป็นต่อการ Deploy)
+# ==============================================================================
+docs/
+export/
+transcript/
+ANTIGRAVITY_PROMPT.md
+AGENTS.md
+**/AGENTS.md
+DEVELOPMENT.md
+**/DEVELOPMENT.md
+DEVELOPMENT_LOG.md
+**/DEVELOPMENT_LOG.md
+
+# ==============================================================================
+# Dependencies & Package Managers
+# ==============================================================================
 node_modules/
 **/node_modules/
+/.pnp
+.pnp.js
 
-# Next.js build output
+# ==============================================================================
+# Next.js Build Output & Cache
+# ==============================================================================
 .next/
 **/.next/
 out/
 **/out/
 build/
 **/build/
+coverage/
+**/coverage/
 
-# Local environment variables
+# ==============================================================================
+# Environment Variables & Secrets (ห้ามนำขึ้น Git/Deploy เด็ดขาด)
+# ==============================================================================
 .env
 **/.env
 .env*.local
 **/.env*.local
+.env.production
+**/.env.production
+*.pem
 
-# SQLite Database
+# ==============================================================================
+# Local SQLite Database (Production ใช้ Neon PostgreSQL เท่านั้น)
+# ==============================================================================
 *.db
 **/*.db
 *.db-journal
 **/*.db-journal
+*.sqlite
+**/*.sqlite
 
-# TypeScript build info
+# ==============================================================================
+# TypeScript Build Info & Auto-generated Definitions
+# ==============================================================================
 *.tsbuildinfo
 **/*.tsbuildinfo
 next-env.d.ts
 **/next-env.d.ts
 
-# OS & Logs
+# ==============================================================================
+# Vercel CLI Local Cache & Metadata
+# ==============================================================================
+.vercel/
+**/.vercel/
+
+# ==============================================================================
+# OS Files & Logs
+# ==============================================================================
 .DS_Store
 Thumbs.db
 *.log
-
-#etc
-AGENTS.md
-DEVELOPMENT.md
-DEVELOPMENT_LOG.md
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
